@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guild Meetup 2026 | Hamont-Achel</title>
+  <meta name="description" content="A relaxed guild weekend in Hamont-Achel, Belgium — 18 July 2026. Campfire beers, BBQ, music and finally meeting everyone outside of Discord." />
+  <style>
+    :root {
+      --bg: #101412;
+      --panel: rgba(255,255,255,.08);
+      --panel-strong: rgba(255,255,255,.13);
+      --text: #f6f1e7;
+      --muted: #c9bfae;
+      --accent: #f6b84b;
+      --accent-2: #8bd3a7;
+      --danger: #ff7b6e;
+      --shadow: 0 24px 80px rgba(0,0,0,.35);
+      --radius: 26px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 10%, rgba(246,184,75,.22), transparent 35%),
+        radial-gradient(circle at 80% 0%, rgba(139,211,167,.16), transparent 32%),
+        linear-gradient(180deg, #111713 0%, #15120f 45%, #0c1110 100%);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .08;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+      z-index: 100;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(16,20,18,.68);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      font-weight: 850;
+      letter-spacing: -.03em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand span:first-child {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #ec7e43);
+      box-shadow: 0 10px 30px rgba(246,184,75,.25);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: .94rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      transition: color .2s ease;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .hero {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 96px 22px 52px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr);
+      gap: 34px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 13px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: .92rem;
+      margin-bottom: 22px;
+    }
+
+    .pulse {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 8px rgba(139,211,167,.12);
+    }
+
+    h1 {
+      font-size: clamp(3.4rem, 8vw, 7.5rem);
+      line-height: .88;
+      letter-spacing: -.08em;
+      margin: 0 0 26px;
+      max-width: 920px;
+    }
+
+    .gradient {
+      background: linear-gradient(90deg, #fff4da, var(--accent), #ff8668);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .lead {
+      font-size: clamp(1.08rem, 2vw, 1.35rem);
+      color: var(--muted);
+      max-width: 720px;
+      margin: 0 0 34px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border-radius: 999px;
+      font-weight: 800;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.12);
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .button:hover { transform: translateY(-2px); }
+    .button.primary {
+      background: linear-gradient(135deg, var(--accent), #f07845);
+      color: #1f1205;
+      border: 0;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+    }
+
+    .event-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      padding: 28px;
+      background:
+        linear-gradient(160deg, rgba(255,255,255,.16), rgba(255,255,255,.05)),
+        radial-gradient(circle at 80% 20%, rgba(246,184,75,.18), transparent 34%);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+    }
+
+    .event-card::before {
+      content: "🔥";
+      position: absolute;
+      right: -20px;
+      bottom: -42px;
+      font-size: 11rem;
+      opacity: .12;
+      transform: rotate(-14deg);
+    }
+
+    .date {
+      font-size: 4.6rem;
+      line-height: .9;
+      font-weight: 950;
+      letter-spacing: -.08em;
+      margin: 0;
+    }
+
+    .month {
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 1.5rem;
+      margin-bottom: 24px;
+    }
+
+    .mini-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .mini {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .mini strong { display: block; }
+    .mini span { color: var(--muted); font-size: .95rem; }
+
+    section {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 54px 22px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1;
+      letter-spacing: -.055em;
+      margin: 0 0 16px;
+    }
+
+    .section-copy {
+      color: var(--muted);
+      max-width: 760px;
+      margin: 0 0 28px;
+      font-size: 1.05rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      padding: 24px;
+      border-radius: var(--radius);
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 18px 45px rgba(0,0,0,.18);
+    }
+
+    .card h3 { margin: 0 0 8px; font-size: 1.25rem; }
+    .card p { margin: 0; color: var(--muted); }
+
+    .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 17px;
+      display: grid;
+      place-items: center;
+      font-size: 1.45rem;
+      background: var(--panel-strong);
+      margin-bottom: 18px;
+    }
+
+    /* ---- Photo gallery (auto-generated by scripts/build-gallery.mjs) ---- */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .gallery-grid figure {
+      margin: 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 18px 45px rgba(0,0,0,.18);
+    }
+
+    .gallery-grid a { display: block; }
+
+    .gallery-grid img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      display: block;
+      transition: transform .35s ease;
+    }
+
+    .gallery-grid figure:hover img { transform: scale(1.05); }
+
+    .gallery-grid figcaption {
+      padding: 13px 16px;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .gallery-empty {
+      color: var(--muted);
+      padding: 26px;
+      border: 1px dashed rgba(255,255,255,.18);
+      border-radius: var(--radius);
+    }
+
+    .gallery-empty code {
+      background: rgba(255,255,255,.08);
+      padding: 2px 7px;
+      border-radius: 7px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 18px;
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+
+    .timeline-item time {
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .timeline-item p { margin: 2px 0 0; color: var(--muted); }
+
+    .split {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .highlight {
+      padding: 32px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(139,211,167,.16), rgba(246,184,75,.12));
+      border: 1px solid rgba(255,255,255,.12);
+      position: sticky;
+      top: 86px;
+    }
+
+    .highlight ul {
+      margin: 18px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    .city-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .city {
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(0,0,0,.19);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+
+    .city h3 { margin: 0 0 8px; }
+    .city p { margin: 0; color: var(--muted); }
+
+    .notice {
+      padding: 24px;
+      border-radius: var(--radius);
+      background: rgba(255,123,110,.1);
+      border: 1px solid rgba(255,123,110,.22);
+      color: #ffdbd7;
+    }
+
+    footer {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 48px 22px 70px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero, .split { grid-template-columns: 1fr; }
+      .cards, .city-grid, .gallery-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero { padding-top: 64px; }
+      .timeline-item { grid-template-columns: 1fr; }
+      .highlight { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header>
+    <nav>
+      <div class="brand"><span>🍻</span><span>Guild Meetup 2026</span></div>
+      <div class="nav-links">
+        <a href="#vibe">Vibe</a>
+        <a href="#gallery">Photos</a>
+        <a href="#plan">Plan</a>
+        <a href="#travel">Travel</a>
+        <a href="#area">Area</a>
+        <a href="#questions">Questions</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow"><span class="pulse"></span> Hamont-Achel, Belgium · +1s welcome</div>
+        <h1>Beers, BBQs & <span class="gradient">Belgian summer chaos.</span></h1>
+        <p class="lead">
+          A relaxed guild weekend near the Dutch border: campfire beers, BBQ smoke, music in the garden,
+          poolside recovery, late-night snack runs and finally meeting everyone outside of Discord.
+        </p>
+        <div class="actions">
+          <a class="button primary" href="#questions">Ask Jan anything</a>
+          <a class="button secondary" href="#travel">How to get here</a>
+        </div>
+      </div>
+
+      <aside class="event-card">
+        <p class="date">18</p>
+        <div class="month">July 2026</div>
+        <div class="mini-grid">
+          <div class="mini"><strong>Saturday meetup</strong><span>Relaxed garden hangout, BBQ, beers and campfire.</span></div>
+          <div class="mini"><strong>Optional Sunday</strong><span>Breakfast, slow recovery and nature if anyone survives.</span></div>
+          <div class="mini"><strong>Remote chaos possible</strong><span>Outdoor projector + Discord if the weather behaves.</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="vibe">
+      <h2 class="section-title">No corporate team-building energy.</h2>
+      <p class="section-copy">
+        This is intentionally casual: no rigid schedule, no forced activities, no weird expectations.
+        Just guildies hanging out somewhere in Belgium after years of raids, memes and Discord calls.
+      </p>
+
+      <div class="cards">
+        <article class="card">
+          <div class="icon">🔥</div>
+          <h3>Campfire beers</h3>
+          <p>Music outside, stories nobody should repeat publicly and “just one more drink.”</p>
+        </article>
+        <article class="card">
+          <div class="icon">🍖</div>
+          <h3>BBQ & snacks</h3>
+          <p>BBQ in the garden, snackbar across the street and dangerous late-night food logistics.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🏊</div>
+          <h3>Poolside recovery</h3>
+          <p>Relax near the pool, sit outside, or move indoors if the weather becomes aggressively Belgian.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <h2 class="section-title">Guild moments.</h2>
+      <p class="section-copy">
+        Years of raids, memes and questionable decisions — and soon, real-life ones too.
+        Drop new photos into the <code>images/</code> folder and they appear here automatically.
+      </p>
+      <!-- GALLERY:START -->
+      <div class="gallery-grid">
+        <figure>
+          <a href="images/beloren-guild-raid.png" target="_blank" rel="noopener">
+            <img src="images/beloren-guild-raid.png" alt="Beloren Guild Raid" loading="lazy" />
+          </a>
+          <figcaption>Beloren Guild Raid</figcaption>
+        </figure>
+      </div>
+      <!-- GALLERY:END -->
+    </section>
+
+    <section id="plan">
+      <div class="split">
+        <div class="highlight">
+          <h2 class="section-title">What to expect</h2>
+          <p class="section-copy">Think Belgian summer weekend, not festival logistics.</p>
+          <ul>
+            <li>Enough space to sit outside</li>
+            <li>Sleeping places for people staying over</li>
+            <li>Bars, snackbar and night shop nearby</li>
+            <li>Bring light clothes, evening layers and rain backup</li>
+          </ul>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <time>Saturday</time>
+            <div><strong>Arrival & garden hangout</strong><p>People arrive, grab drinks, meet properly and settle in.</p></div>
+          </div>
+          <div class="timeline-item">
+            <time>Evening</time>
+            <div><strong>BBQ, music and campfire</strong><p>The main event: food, beers, Discord stories and questionable decisions.</p></div>
+          </div>
+          <div class="timeline-item">
+            <time>Late night</time>
+            <div><strong>Local bars or garden chaos</strong><p>Snack runs and emergency beer logistics are very possible.</p></div>
+          </div>
+          <div class="timeline-item">
+            <time>Sunday</time>
+            <div><strong>Breakfast & slow recovery</strong><p>Optional breakfast, walking, nature or simply surviving Belgian beer.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="travel">
+      <h2 class="section-title">Getting here</h2>
+      <p class="section-copy">
+        Exact address details will be shared privately after confirmations. Hamont-Achel is close to the Dutch border
+        and reachable from several airports and train routes.
+      </p>
+
+      <div class="cards">
+        <article class="card">
+          <div class="icon">✈️</div>
+          <h3>Closest airports</h3>
+          <p>Eindhoven is nearest; Brussels and Amsterdam Schiphol usually have strong international connections.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🚆</div>
+          <h3>By train</h3>
+          <p>From Brussels, head toward Neerpelt. From Amsterdam or Schiphol, train connections toward Weert work well.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🚗</div>
+          <h3>Pickup help</h3>
+          <p>Depending on work timing, Jan will try to help organize pickups where possible.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="area">
+      <h2 class="section-title">Border-town calm, city chaos nearby.</h2>
+      <p class="section-copy">
+        Hamont-Achel is small, green and relaxed, surrounded by forests, beer culture and cycling routes.
+        But bigger nights out are still within reach.
+      </p>
+
+      <div class="city-grid">
+        <article class="city"><h3>Eindhoven</h3><p>Closest proper city, terraces, bars, student energy and Stratumseind nightlife.</p></article>
+        <article class="city"><h3>Amsterdam</h3><p>Canals, coffeeshops, crowds, nightlife and expensive but memorable chaos.</p></article>
+        <article class="city"><h3>Maastricht</h3><p>Old streets, terraces, good food and a calmer Burgundian vibe.</p></article>
+        <article class="city"><h3>Brussels</h3><p>International, messy, late-night food and proper club culture.</p></article>
+        <article class="city"><h3>Antwerp</h3><p>Stylish Belgian city culture, architecture, cafés and a dramatic train station.</p></article>
+        <article class="city"><h3>Düsseldorf</h3><p>Altstadt bars, cocktails, beer culture and a great Japanese food district.</p></article>
+      </div>
+    </section>
+
+    <section id="beer">
+      <h2 class="section-title">Beer, food & touching grass.</h2>
+      <p class="section-copy">
+        Strong Trappist and abbey beer traditions, deceptively harmless tripels and dubbels, and the kind of
+        nature that's perfect for recovering from too much Belgian beer and too little sleep.
+      </p>
+
+      <div class="cards">
+        <article class="card">
+          <div class="icon">🍺</div>
+          <h3>Belgian beer</h3>
+          <p>Achel and nearby abbey traditions — tripels, dubbels and dark beers that quietly ruin your evening.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🍟</div>
+          <h3>Fries & stoofvlees</h3>
+          <p>Belgian fries with rich Flemish beef stew — mandatory late-night and hangover food. Plus award-winning Achelse Blauwe cheese.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🌲</div>
+          <h3>Nature & recovery</h3>
+          <p>De Malpie heathland and the Leenderbos forests — quiet walking routes for slow, hungover afternoons.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="notice">
+        <strong>Safety vibe:</strong> meeting online friends IRL can feel weird at first, and that’s fine.
+        The goal is safe, relaxed and welcoming — no pressure, no forced activities.
+      </div>
+    </section>
+
+    <section id="questions">
+      <h2 class="section-title">Questions?</h2>
+      <p class="section-copy">
+        Ask about transport, flights, sleeping arrangements, nearby hotels, what to bring, city trips or anything else.
+        We’ll figure it out. This is supposed to feel relaxed, not stressful.
+      </p>
+      <a class="button primary" href="mailto:jan.minke@telenet.be">Contact Jan</a>
+    </section>
+  </main>
+
+  <footer>
+    Guild Meetup 2026 · Hamont-Achel · Beers, stories, BBQ smoke, campfires and guild chaos.
+  </footer>
+</body>
+</html>

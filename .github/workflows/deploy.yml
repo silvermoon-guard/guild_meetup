@@ -1,0 +1,56 @@
+# Publishes the website to GitHub Pages.
+#
+# This runs automatically every time something changes on the `main` branch
+# (for example: you add a photo, or edit some text on the website). You do not
+# need to run anything yourself — GitHub does it for you, usually within a
+# minute or two. You can watch progress under the repo's "Actions" tab.
+name: Publish website
+
+on:
+  # Run whenever changes land on the main branch.
+  push:
+    branches: [main]
+  # Also let you trigger it by hand from the Actions tab ("Run workflow").
+  workflow_dispatch:
+
+# Permissions GitHub Pages needs to publish.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# If you push twice quickly, cancel the older run and keep the newest.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the files
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Rebuild the photo gallery from the images/ folder
+        run: node scripts/build-gallery.mjs
+
+      - name: Package the website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

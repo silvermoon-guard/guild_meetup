@@ -1,0 +1,6 @@
+# macOS clutter
+.DS_Store
+
+# Reference/source files — kept locally, never published or tracked
+Guildmeeting.txt
+preview.html
