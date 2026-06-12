@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!--
+  SAMPLE / EXPERIMENT DESIGN — proves the multi-design pipeline works.
+  The real, default invite lives at the repo root: ../../index.html  (URL: /)
+  This file is served at /designs/poster/. Copy this folder to start a new experiment.
+  The photo gallery between the GALLERY markers is filled in automatically by
+  scripts/build-gallery.mjs from the shared images/ folder — same as the default.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guild Meetup 2026 — Poster (sample design)</title>
+  <meta name="description" content="Sample alternative layout for the Guild Meetup 2026 invite." />
+  <style>
+    :root {
+      --bg: #101412;
+      --text: #f6f1e7;
+      --muted: #c9bfae;
+      --accent: #f6b84b;
+      --accent-2: #8bd3a7;
+      --line: rgba(255,255,255,.12);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% -10%, rgba(246,184,75,.12), transparent 45%),
+        linear-gradient(180deg, #121814 0%, #0c1110 100%);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    .sample-flag {
+      text-align: center; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase;
+      color: #1f1205; background: linear-gradient(90deg, var(--accent), #f07845); padding: 8px 16px; font-weight: 800;
+    }
+    .sample-flag a { color: #1f1205; }
+    main { max-width: 720px; margin: 0 auto; padding: 56px 22px 90px; text-align: center; }
+    .kicker {
+      display: inline-block; font-size: .85rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; margin-bottom: 28px;
+    }
+    h1 {
+      font-size: clamp(2.8rem, 9vw, 5rem); line-height: .96; letter-spacing: -.04em; margin: 0 0 18px; font-weight: 850;
+    }
+    h1 .gradient {
+      background: linear-gradient(90deg, #fff4da, var(--accent), #ff8668);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .date { font-size: 1.2rem; color: var(--accent); font-weight: 800; letter-spacing: .02em; margin-bottom: 28px; }
+    .lead { color: var(--muted); font-size: 1.12rem; max-width: 560px; margin: 0 auto 36px; }
+    .expect { list-style: none; padding: 0; margin: 0 auto 44px; max-width: 460px; display: grid; gap: 12px; text-align: left; }
+    .expect li {
+      display: flex; gap: 12px; align-items: center; padding: 14px 18px; border: 1px solid var(--line);
+      border-radius: 16px; background: rgba(255,255,255,.04); color: var(--text);
+    }
+    .expect li span { font-size: 1.2rem; }
+    .gallery-title { font-size: 1.6rem; letter-spacing: -.02em; margin: 8px 0 6px; }
+    .gallery-sub { color: var(--muted); margin: 0 0 24px; font-size: .98rem; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 44px; }
+    .gallery-grid figure { margin: 0; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: rgba(0,0,0,.2); }
+    .gallery-grid a { display: block; }
+    .gallery-grid img { width: 100%; height: 220px; object-fit: cover; display: block; transition: transform .35s ease; }
+    .gallery-grid figure:hover img { transform: scale(1.05); }
+    .gallery-grid figcaption { padding: 12px 14px; color: var(--muted); font-size: .9rem; }
+    .gallery-empty { color: var(--muted); padding: 24px; border: 1px dashed var(--line); border-radius: var(--radius); }
+    .gallery-empty code { background: rgba(255,255,255,.08); padding: 2px 7px; border-radius: 7px; }
+    .button {
+      display: inline-flex; align-items: center; gap: 10px; padding: 15px 26px; border-radius: 999px;
+      font-weight: 800; text-decoration: none; color: #1f1205;
+      background: linear-gradient(135deg, var(--accent), #f07845);
+    }
+    .button:hover { transform: translateY(-2px); }
+    footer { color: var(--muted); font-size: .85rem; margin-top: 46px; }
+    @media (max-width: 560px) { .gallery-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="sample-flag">Sample experiment design · the real invite is <a href="../../">here →</a></div>
+  <main>
+    <span class="kicker">Hamont-Achel, Belgium · +1s welcome</span>
+    <h1>Beers, BBQs &amp; <span class="gradient">Belgian summer chaos.</span></h1>
+    <div class="date">Saturday · 18 July 2026</div>
+    <p class="lead">
+      A relaxed guild weekend near the Dutch border. Campfire beers, BBQ smoke, music in the garden,
+      and finally meeting everyone outside of Discord.
+    </p>
+
+    <ul class="expect">
+      <li><span>🔥</span> Campfire beers &amp; stories nobody should repeat</li>
+      <li><span>🍖</span> BBQ in the garden, snackbar across the street</li>
+      <li><span>🏊</span> Poolside recovery (weather permitting)</li>
+      <li><span>🛏️</span> Sleeping spots for people staying over</li>
+    </ul>
+
+    <h2 class="gallery-title">Guild moments</h2>
+    <p class="gallery-sub">Same shared photos as the main page — added automatically.</p>
+    <!-- GALLERY:START -->
+      <div class="gallery-grid">
+        <figure>
+          <a href="../../images/beloren-guild-raid.png" target="_blank" rel="noopener">
+            <img src="../../images/beloren-guild-raid.png" alt="Beloren Guild Raid" loading="lazy" />
+          </a>
+          <figcaption>Beloren Guild Raid</figcaption>
+        </figure>
+      </div>
+      <!-- GALLERY:END -->
+
+    <a class="button" href="mailto:jan.minke@telenet.be">Ask Jan anything →</a>
+
+    <footer>Guild Meetup 2026 · Hamont-Achel · sample layout</footer>
+  </main>
+</body>
+</html>
