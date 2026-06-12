@@ -161,6 +161,57 @@ https://silvermoon-guard.github.io/guild_meetup/.
 
 ---
 
+## Design & theme — guidance for agents
+
+This section is for any AI agent (or designer) editing the **default** site (`index.html`),
+so the look and feel stays consistent. Experiments under `designs/` may explore other
+directions, but the default invite must keep the established theme.
+
+### The vibe
+Campfire-at-dusk; a relaxed guild gathering. Warm, dark, a little nostalgic — these are
+World of Warcraft guildies meeting in real life after years on Discord. The copy is
+playful, self-deprecating and irreverent, **never corporate**. Source material and tone of
+voice live in `Guildmeeting.txt`.
+
+### Design tokens (CSS variables at the top of `index.html`)
+- **Background:** deep warm green-black `--bg:#101412` with *subtle* amber + sage radial
+  glows and a faint grain overlay. The glow is intentionally restrained (halved from an
+  earlier draft) — keep it that way.
+- **Text:** warm off-white `--text:#f6f1e7`; muted `--muted:#c9bfae`.
+- **Accents:** amber `--accent:#f6b84b` (primary), sage `--accent-2:#8bd3a7` (secondary),
+  coral `--danger:#ff7b6e` (used only for the safety notice).
+- **Typography:** **Inter** with a system-sans fallback. One family, varied weights. Large,
+  tight headlines (negative letter-spacing) over generous body line-height.
+- **Shape:** rounded glass cards (`--radius:26px`), 1px translucent borders, soft deep shadows.
+
+### Layout conventions
+- Centered column, ~1180px max; sections ~54px vertical padding.
+- Two-column hero: copy + a glass "event card" with the 🔥 watermark.
+- Card grids (3-up), a sticky highlight + timeline split, a 2-up city grid.
+- The photo gallery sits between the `<!-- GALLERY -->` markers and is auto-generated.
+
+### Motion principles
+- Quiet and tasteful: scroll-reveal fade/rise with a small stagger, a gentle hover lift on
+  cards, an animated underline + scroll-spy nav, and an accessible lightbox.
+- **Always** honor `prefers-reduced-motion` (it disables reveals/transitions).
+- Pure CSS + vanilla JS. No frameworks, no libraries, no build step for the page itself.
+
+### Do NOT (lessons learned the hard way)
+The default was deliberately pulled back from an over-designed draft. Engagement should
+come from **craft — spacing, hierarchy, restraint, micro-interactions — not gimmicks.**
+- ❌ No new font families (no display serifs, no monospace labels). Stick to Inter.
+- ❌ No particle/ember effects, cursor-following glows, animated marquees, or parchment/"menu" skins.
+- ❌ No neon or heavy gradients; keep the ambient glow subtle.
+- ✅ When in doubt, extend the existing patterns rather than inventing new ones.
+
+### Invariants to preserve (or you break automation/accessibility)
+- Keep the `<!-- GALLERY:START -->` / `<!-- GALLERY:END -->` markers and the
+  `.gallery-grid` / `.gallery-empty` classes — the build script **and** the lightbox rely on them.
+- Keep the `mailto:` contact and the event date in the `<title>` plus the hero `.date`/`.month`.
+- Keep `:focus-visible` outlines and the reduced-motion handling.
+
+---
+
 ## What each file is (project map)
 
 | File / folder | What it's for |
