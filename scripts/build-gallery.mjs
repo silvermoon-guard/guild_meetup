@@ -133,8 +133,9 @@ function main() {
   const results = findHtmlFiles(ROOT).map((f) => updateFile(f, images, captions)).filter(Boolean);
 
   if (results.length === 0) {
-    console.error(`❌ No design files with gallery markers found.\n   Add "${START}" … "${END}" to a page first.`);
-    process.exit(1);
+    console.log(`ℹ️  No pages contain gallery markers — nothing to build.`);
+    console.log(`   (Add "${START}" … "${END}" to a page to enable an auto photo gallery.)`);
+    return;
   }
   console.log(`✅ ${images.length} photo(s) · ${results.length} design(s) with a gallery:`);
   results.forEach((r) => console.log(`   ${r.changed ? "updated" : "up to date"} — ${r.rel}`));

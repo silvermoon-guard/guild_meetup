@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<!--
+  SAMPLE / EXPERIMENT DESIGN — image-forward "explore the region" editorial.
+  Real invite (default) lives at the repo root: ../../  (URL: /)
+  A complete invite (the weekend, plan, travel, region) built around the shared,
+  CC-licensed city photos in images/locations/. Credits in the footer (CC BY / BY-SA).
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guild Meetup — explore the region</title>
+  <meta name="theme-color" content="#0b0c0a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b0c0a; --bg-2: #0f110e; --text: #f4efe4; --muted: #aaa291; --faint: #756e60;
+      --amber: #f3b54a; --ember: #ff8a3d; --sage: #8bd3a7; --line: rgba(244,239,228,.12);
+      --display: "DM Serif Display", Georgia, serif; --body: "DM Sans", system-ui, sans-serif;
+      --ease: cubic-bezier(.22,.68,0,1); --maxw: 1140px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; font-family: var(--body); color: var(--text); line-height: 1.6;
+      background: radial-gradient(80% 50% at 80% -5%, rgba(243,181,74,.10), transparent 60%), linear-gradient(180deg, var(--bg-2), var(--bg));
+      background-attachment: fixed; overflow-x: hidden;
+    }
+    a { color: inherit; }
+    ::selection { background: var(--ember); color: #1a0d02; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+    .topbar { display: flex; justify-content: space-between; align-items: center; padding: 22px 24px; max-width: var(--maxw); margin: 0 auto; }
+    .topbar .brand { font-family: var(--display); font-size: 1.3rem; }
+    .topbar a.home { font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; text-decoration: none; }
+    .topbar a.home:hover { color: var(--text); border-color: var(--amber); }
+
+    .hero { padding: 56px 0 26px; }
+    .kicker { font-size: .76rem; letter-spacing: .24em; text-transform: uppercase; color: var(--amber); }
+    .hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(3rem, 8vw, 6.2rem); line-height: 1.02; letter-spacing: -.01em; margin: 16px 0 0; max-width: 14ch; }
+    .hero h1 em { font-style: italic; color: var(--amber); }
+    .hero .lead { color: var(--muted); font-size: 1.15rem; max-width: 60ch; margin: 22px 0 0; }
+    .facts { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 30px; }
+    .facts .n { font-family: var(--display); font-size: 1.6rem; }
+    .facts .l { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
+
+    .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 72px 0 18px; border-top: 1px solid var(--line); padding-top: 26px; flex-wrap: wrap; }
+    .section-head h2 { font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 4vw, 2.8rem); margin: 0; }
+    .section-head .n { font-family: var(--display); color: var(--faint); font-size: 1rem; }
+    .section-head p { color: var(--muted); margin: 0; max-width: 42ch; font-size: .98rem; }
+
+    /* the weekend: lead + expect columns */
+    .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 6vw, 80px); align-items: start; }
+    .twocol .big-lead { font-family: var(--display); font-weight: 400; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.25; }
+    .twocol .big-lead em { font-style: italic; color: var(--amber); }
+    .expect { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+    .expect li { display: grid; grid-template-columns: 30px 1fr; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .expect li:first-child { border-top: 1px solid var(--line); }
+    .expect .em { font-size: 1.3rem; }
+    .expect b { font-family: var(--display); font-weight: 400; font-size: 1.2rem; display: block; }
+    .expect span.d { color: var(--muted); font-size: .95rem; }
+
+    /* schedule (editorial agenda) */
+    .agenda { display: grid; grid-template-columns: 150px 1fr; gap: clamp(20px, 4vw, 50px); }
+    .agenda .day { font-family: var(--display); font-size: 1.8rem; }
+    .agenda .day small { display: block; font-family: var(--body); font-size: .76rem; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-top: 4px; }
+    .agenda ol { list-style: none; margin: 0; padding: 0; }
+    .agenda li { display: grid; grid-template-columns: 76px 1fr; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .agenda li:first-child { border-top: 1px solid var(--line); }
+    .agenda .t { color: var(--amber); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .agenda .e b { font-family: var(--display); font-weight: 400; font-size: 1.15rem; }
+    .agenda .e p { margin: 2px 0 0; color: var(--muted); font-size: .94rem; }
+    .agenda .day-block + .day-block { margin-top: 30px; }
+
+    /* generic info columns (travel, region) */
+    .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 4vw, 44px); }
+    .col h3 { font-family: var(--display); font-weight: 400; font-size: 1.5rem; margin: 0 0 6px; }
+    .col h3 .em { color: var(--amber); font-style: normal; }
+    .col p { color: var(--muted); margin: 0; font-size: .98rem; }
+    .col .k { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+
+    /* destination rows */
+    .dest { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(24px, 5vw, 64px); align-items: center; padding: 46px 0; border-bottom: 1px solid var(--line); }
+    .dest:nth-child(even) .shot { order: 2; }
+    .shot { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 4/3; cursor: zoom-in; box-shadow: 0 30px 70px rgba(0,0,0,.45); }
+    .shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .7s var(--ease); }
+    .shot:hover img { transform: scale(1.05); }
+    .shot .zoom { position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: rgba(8,9,7,.55); backdrop-filter: blur(6px); font-size: .9rem; opacity: 0; transition: opacity .3s; }
+    .shot:hover .zoom { opacity: 1; }
+    .copy .idx { font-family: var(--display); font-size: 1rem; color: var(--faint); }
+    .copy h3 { font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 4vw, 3rem); margin: 6px 0 4px; letter-spacing: -.01em; }
+    .copy h3 .dist { display: inline-block; vertical-align: middle; margin-left: 12px; font-family: var(--body); font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); border: 1px solid var(--line); border-radius: 999px; padding: 5px 11px; }
+    .copy p { color: var(--muted); font-size: 1.05rem; margin: 14px 0 0; }
+    .copy .why { margin-top: 14px; font-size: .85rem; color: var(--faint); }
+
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    .pullquote { font-family: var(--display); font-weight: 400; font-style: italic; font-size: clamp(1.4rem, 3.4vw, 2.2rem); line-height: 1.3; color: var(--text); max-width: 30ch; margin: 8px 0; }
+    .pullquote .amber { color: var(--amber); }
+    .note { padding: 22px 24px; border-radius: 16px; background: rgba(139,211,167,.09); border: 1px solid rgba(139,211,167,.2); color: #dff3e7; }
+
+    .band { text-align: center; padding: 80px 0 30px; }
+    .band h2 { font-family: var(--display); font-weight: 400; font-size: clamp(2.2rem, 6vw, 4rem); margin: 0 0 12px; }
+    .band h2 em { font-style: italic; color: var(--amber); }
+    .band p { color: var(--muted); max-width: 52ch; margin: 0 auto 26px; }
+    .cta { display: inline-flex; align-items: center; gap: 8px; padding: 15px 26px; border-radius: 999px; font-weight: 600; text-decoration: none; color: #1a0d02; background: linear-gradient(135deg, var(--amber), var(--ember)); box-shadow: 0 14px 40px rgba(255,138,61,.28); }
+
+    footer { border-top: 1px solid var(--line); margin-top: 50px; padding: 30px 0 60px; }
+    .credits { color: var(--faint); font-size: .76rem; line-height: 1.9; }
+    .credits a { color: var(--muted); }
+    .credits .hd { color: var(--muted); letter-spacing: .12em; text-transform: uppercase; font-size: .7rem; display: block; margin-bottom: 8px; }
+
+    .lb { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 5vmin; background: rgba(6,7,5,.93); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; transition: opacity .35s, visibility .35s; }
+    .lb.open { opacity: 1; visibility: visible; }
+    .lb figure { margin: 0; max-width: 1100px; }
+    .lb img { max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 40px 120px rgba(0,0,0,.7); transform: scale(.97); transition: transform .4s var(--ease); }
+    .lb.open img { transform: scale(1); }
+    .lb figcaption { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 14px; }
+    .lb .x { position: absolute; top: 22px; right: 26px; background: rgba(255,255,255,.08); border: 1px solid var(--line); color: var(--text); border-radius: 999px; padding: 9px 16px; font: inherit; cursor: pointer; }
+
+    @media (max-width: 820px) {
+      .twocol, .agenda, .cols, .dest { grid-template-columns: 1fr; }
+      .agenda { gap: 8px; } .agenda .day { margin-bottom: 6px; }
+      .dest { gap: 18px; } .dest:nth-child(even) .shot { order: 0; }
+      .cols { gap: 26px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .reveal { opacity: 1; transform: none; transition: none; } .shot:hover img { transform: none; } }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">Guild Meetup ’26</span>
+    <a class="home" href="../../">Main invite →</a>
+  </div>
+
+  <header class="hero wrap">
+    <span class="kicker">Hamont-Achel, Belgium · Saturday 18 July 2026 · +1s welcome</span>
+    <h1>A campfire weekend. <em>The whole region within reach.</em></h1>
+    <p class="lead">
+      The meetup itself is a relaxed garden weekend — beers, BBQ, music and a campfire, finally meeting
+      everyone outside of Discord. But Hamont-Achel sits right on the Belgian-Dutch border, so you can
+      spend the night around a fire and still wake up deciding to visit a city.
+    </p>
+    <div class="facts">
+      <div><div class="n">18·07</div><div class="l">Saturday 2026</div></div>
+      <div><div class="n">+1</div><div class="l">Welcome</div></div>
+      <div><div class="n">6</div><div class="l">Cities nearby</div></div>
+      <div><div class="n">3</div><div class="l">Countries</div></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- THE WEEKEND -->
+    <div class="section-head"><h2>The weekend</h2><span class="n">01</span></div>
+    <div class="twocol reveal">
+      <p class="big-lead">No rigid schedule, no forced activities, <em>no corporate team-building energy.</em> Just guildies hanging out in a Belgian garden after years of raids and Discord calls.</p>
+      <ul class="expect">
+        <li><span class="em">🔥</span><div><b>Campfire beers</b><span class="d">Music outside, stories nobody should repeat, and “just one more drink.”</span></div></li>
+        <li><span class="em">🍖</span><div><b>BBQ &amp; snacks</b><span class="d">BBQ in the garden, a snackbar across the street, easy late-night food.</span></div></li>
+        <li><span class="em">🏊</span><div><b>Poolside recovery</b><span class="d">Relax by the pool, or move indoors if the weather turns Belgian.</span></div></li>
+        <li><span class="em">🛏️</span><div><b>Stay over</b><span class="d">Sleeping spots for people staying, plus an optional slow Sunday.</span></div></li>
+      </ul>
+    </div>
+
+    <!-- THE PLAN -->
+    <div class="section-head"><h2>The plan, loosely</h2><span class="n">02</span></div>
+    <div class="agenda reveal">
+      <div class="day">When</div>
+      <div>
+        <div class="day-block">
+          <ol>
+            <li><span class="t">Sat 15:00</span><div class="e"><b>Arrival &amp; garden hangout</b><p>People roll in, grab a drink and meet properly.</p></div></li>
+            <li><span class="t">18:30</span><div class="e"><b>BBQ &amp; campfire</b><p>The main event — food, beers, music and guild stories.</p></div></li>
+            <li><span class="t">23:00</span><div class="e"><b>Bars or garden chaos</b><p>Local bars across the street; emergency beer logistics.</p></div></li>
+            <li><span class="t">Sun 10:00</span><div class="e"><b>Breakfast &amp; slow recovery</b><p>Optional. A walk in nature, or a slow goodbye.</p></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- GETTING HERE -->
+    <div class="section-head"><h2>Getting here</h2><span class="n">03</span></div>
+    <p class="lead" style="margin:0 0 26px;color:var(--muted)">Exact address shared privately after confirmations — but the region is surprisingly easy to reach from three countries.</p>
+    <div class="cols reveal">
+      <div class="col"><div class="k">By air</div><h3>Three airports</h3><p>Eindhoven is nearest; Brussels and Amsterdam Schiphol have the strongest international connections.</p></div>
+      <div class="col"><div class="k">By rail</div><h3>Easy trains</h3><p>Toward Neerpelt from Brussels; toward Weert from Amsterdam or Schiphol. Better than you'd expect.</p></div>
+      <div class="col"><div class="k">On arrival</div><h3>Pickups</h3><p>Jan will try to organise pickups where possible, depending on work timing around the weekend.</p></div>
+    </div>
+
+    <!-- CITIES -->
+    <div class="section-head"><h2>Nearby cities worth visiting</h2><span class="n">04</span></div>
+    <p class="lead" style="margin:0 0 8px;color:var(--muted)">One campfire weekend, three countries' worth of day-trips. Tap any photo to enlarge.</p>
+    <div id="dests"></div>
+
+    <!-- REGION: beer / food / nature -->
+    <div class="section-head"><h2>Beer, food &amp; slow mornings</h2><span class="n">05</span></div>
+    <div class="cols reveal">
+      <div class="col"><div class="k">Drink</div><h3>Trappist &amp; abbey beer</h3><p>Tripels, dubbels and dark beers that taste deceptively harmless while quietly ruining your evening. The Achel abbey tradition runs deep here.</p></div>
+      <div class="col"><div class="k">Eat</div><h3>Fries &amp; stoofvlees</h3><p>Belgian fries with rich Flemish beef stew — mandatory late-night and hangover food. Plus the award-winning Achelse Blauwe cheese.</p></div>
+      <div class="col"><div class="k">Recover</div><h3>Forests &amp; heath</h3><p>De Malpie heathland and the Leenderbos forests — quiet trails for touching grass after too much Discord and Belgian beer.</p></div>
+    </div>
+
+    <!-- SAFETY -->
+    <div class="section-head"><h2>Meeting online friends IRL</h2><span class="n">06</span></div>
+    <div class="twocol" style="align-items:center">
+      <p class="pullquote">Safe, relaxed and <span class="amber">welcoming</span>. No pressure, no forced activities, no weird expectations.</p>
+      <div class="note">It can feel a little weird at first — that's completely fine. A few guildies have already visited, and several have met at previous meetups. The whole point is simply a good weekend together somewhere in Belgium.</div>
+    </div>
+
+    <section class="band">
+      <h2>Questions? <em>We'll figure it out.</em></h2>
+      <p>Transport, flights, sleeping arrangements, what to bring, city trips — ask Jan about anything. This is supposed to feel relaxed, not stressful.</p>
+      <a class="cta" href="mailto:jan.minke@telenet.be">Contact Jan →</a>
+    </section>
+  </main>
+
+  <footer class="wrap"><div class="credits" id="credits"></div></footer>
+
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-hidden="true">
+    <button class="x" id="lbx" aria-label="Close">Close ✕</button>
+    <figure><img id="lbimg" src="" alt="" /><figcaption id="lbcap"></figcaption></figure>
+  </div>
+
+  <script>
+    const CITIES = [
+      { key:"eindhoven",  name:"Eindhoven",  dist:"~30 min", desc:"The closest proper city — modern, student-heavy and very social in summer. Stratumseind is one of the most famous pub streets in the Netherlands.", why:"Spontaneous “just one drink” trip", by:"Zairon", lic:"CC BY-SA 4.0", src:"https://commons.wikimedia.org/wiki/File:Eindhoven_Evoluon_06.jpg" },
+      { key:"amsterdam",  name:"Amsterdam",  dist:"~1.5 h",  desc:"Canals, coffeeshops, crowds and nightlife. Chaotic and expensive — but the city works best when you don't overplan it. Just wander and let it happen.", why:"Worth it at least once", by:"Basile Morin", lic:"CC BY-SA 4.0", src:"https://commons.wikimedia.org/wiki/File:Water_reflection_of_canal_houses_at_blue_hour_in_Damrak_Amsterdam_the_Netherlands.jpg" },
+      { key:"maastricht", name:"Maastricht", dist:"~1 h",    desc:"The most Burgundian city in the Netherlands — terraces, old streets, long afternoons in the sun. Calmer and more grown-up than Amsterdam.", why:"Recovering from Amsterdam chaos", by:"Berthold Werner", lic:"CC BY-SA 4.0", src:"https://commons.wikimedia.org/wiki/File:Maastricht_Vrijthof_15_BW_2017-08-19_12-06-24.jpg" },
+      { key:"brussels",   name:"Brussels",   dist:"~1.5 h",  desc:"International, messy in the best possible way, full of hidden bars, late-night food and proper club culture. The Grand-Place is unreal after dark.", why:"A bigger night out", by:"Diego Delso", lic:"CC BY-SA 4.0", src:"https://commons.wikimedia.org/wiki/File:Edificios_en_la_Grand-Place,_Bruselas,_B%C3%A9lgica,_2021-12-15,_DD_184-186_HDR.jpg" },
+      { key:"antwerp",    name:"Antwerp",    dist:"~1.5 h",  desc:"Stylish without trying too hard — nightlife, architecture, cafés and terraces. Its train station is one of the most absurdly beautiful in Europe.", why:"Style with zero effort", by:"Trougnouf", lic:"CC BY 4.0", src:"https://commons.wikimedia.org/wiki/File:Antwerp,_BE_(DSC_0192)_Antwerpen-Centraal_railway_station_main_hall_ceiling.jpg" },
+      { key:"dusseldorf", name:"Düsseldorf", dist:"~1.5 h",  desc:"Modern, international and social. The Altstadt has hundreds of bars packed close together, plus a huge Japanese district full of ramen and sushi.", why:"The easiest spontaneous night out", by:"Anıl Öztaş", lic:"CC BY-SA 4.0", src:"https://commons.wikimedia.org/wiki/File:D%C3%BCsseldorf_(DE),_Jan-Wellem-Reiterdenkmal_--_2014_--_2313.jpg" },
+    ];
+    const IMG = (k) => `../../images/locations/${k}.jpg`;
+
+    document.getElementById("dests").innerHTML = CITIES.map((c, i) => `
+      <article class="dest reveal">
+        <div class="shot" data-src="${IMG(c.key)}" data-cap="${c.name} — © ${c.by} (${c.lic})">
+          <img src="${IMG(c.key)}" alt="${c.name}" loading="lazy" /><span class="zoom">⤢</span>
+        </div>
+        <div class="copy">
+          <span class="idx">${String(i + 1).padStart(2, "0")} / 06</span>
+          <h3>${c.name}<span class="dist">${c.dist}</span></h3>
+          <p>${c.desc}</p>
+          <div class="why">↳ ${c.why}</div>
+        </div>
+      </article>`).join("");
+
+    document.getElementById("credits").innerHTML =
+      `<span class="hd">Photo credits</span>City photos via Wikimedia Commons, used under their Creative Commons licenses — ` +
+      CITIES.map((c) => `${c.name}: ${c.by}, <a href="${c.src}" target="_blank" rel="noopener">${c.lic}</a>`).join(" · ") +
+      `.<br><br>Guild Meetup 2026 · Hamont-Achel · <a href="../../">main invite</a> · <a href="../">all designs</a>`;
+
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+    const lb = document.getElementById("lb"), lbimg = document.getElementById("lbimg"), lbcap = document.getElementById("lbcap");
+    let last = null;
+    document.addEventListener("click", (e) => {
+      const shot = e.target.closest(".shot");
+      if (shot) { last = document.activeElement; lbimg.src = shot.dataset.src; lbimg.alt = shot.dataset.cap; lbcap.textContent = shot.dataset.cap; lb.classList.add("open"); lb.setAttribute("aria-hidden", "false"); document.getElementById("lbx").focus(); }
+    });
+    function close() { lb.classList.remove("open"); lb.setAttribute("aria-hidden", "true"); lbimg.src = ""; if (last) last.focus(); }
+    document.getElementById("lbx").addEventListener("click", close);
+    lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && lb.classList.contains("open")) close(); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<!--
+  SAMPLE / EXPERIMENT DESIGN — an "app" take on the invite.
+  Real invite (default) lives at the repo root: ../../  (URL: /)
+  Modern web interactions: View Transitions API (tab switching), the native
+  Popover API (city detail sheets), scroll-driven reveals (animation-timeline)
+  and a schedule-style agenda. City photos: shared images/locations/ (CC — see Credits).
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Guild Meetup — app</title>
+  <meta name="theme-color" content="#0e1110" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    @property --hue { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+    :root {
+      --bg: #0e1110; --surface: #161b18; --surface-2: #1d231f;
+      --text: #f3efe6; --muted: #a9a294; --faint: #6f6a5d;
+      --amber: #f6b84b; --ember: #ff8a3d; --sage: #8bd3a7;
+      --line: rgba(255,255,255,.09); --line-2: rgba(255,255,255,.16);
+      --display: "Bricolage Grotesque", system-ui, sans-serif; --body: "Manrope", system-ui, sans-serif;
+      --ease: cubic-bezier(.22,.68,0,1);
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { margin: 0; font-family: var(--body); color: var(--text); background: var(--bg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    ::selection { background: var(--ember); color: #1a0d02; }
+
+    /* ---- top app bar: brand · tabs · date ---- */
+    .appbar {
+      position: sticky; top: 0; z-index: 30;
+      padding: calc(11px + env(safe-area-inset-top, 0px)) 0 11px;
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      backdrop-filter: blur(16px) saturate(1.3); border-bottom: 1px solid var(--line-2);
+    }
+    .bar-inner {
+      position: relative; max-width: 720px; margin: 0 auto; padding: 0 18px;
+      min-height: 46px; display: flex; align-items: center; justify-content: center;
+    }
+    .appbar .id b { white-space: nowrap; }
+    .appbar .id { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; }
+    .appbar .mark { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; font-size: .95rem; background: conic-gradient(from var(--hue), var(--amber), var(--ember), var(--amber)); animation: spin 10s linear infinite; box-shadow: inset 0 0 0 1px rgba(255,255,255,.25); }
+    @keyframes spin { to { --hue: 360deg; } }
+    .appbar .id b { font-family: var(--display); font-weight: 800; letter-spacing: -.01em; }
+
+    .tabs { display: flex; gap: 4px; }
+    .tabs button {
+      justify-content: center;
+      display: inline-flex; align-items: center; gap: 7px; border: 0; background: transparent;
+      color: var(--muted); font: inherit; font-size: .85rem; font-weight: 600; letter-spacing: .01em;
+      padding: 9px 11px; border-radius: 12px; cursor: pointer; transition: color .2s, background .2s, box-shadow .2s;
+    }
+    .tabs button svg { width: 18px; height: 18px; }
+    .tabs button:hover { color: var(--text); }
+    .tabs button[aria-selected="true"] { color: #1a0d02; background: linear-gradient(135deg, var(--amber), var(--ember)); box-shadow: 0 6px 16px rgba(255,138,61,.3); }
+    .tabs button .lbl { display: inline; }
+
+    .date { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: flex-end; gap: 1px; border: 1px solid rgba(246,184,75,.42); background: rgba(246,184,75,.1); border-radius: 13px; padding: 7px 13px; }
+    .date { white-space: nowrap; }
+    .date .d { font-family: var(--display); font-weight: 800; font-size: .98rem; letter-spacing: -.01em; color: var(--amber); line-height: 1.05; }
+    .date .l { font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+    /* ---- view container + transitions ---- */
+    main { max-width: 720px; margin: 0 auto; padding: 24px 18px 60px; }
+    [data-view][hidden] { display: none; }
+    @keyframes fade-up { from { opacity: 0; transform: translateY(10px); } }
+    [data-view]:not([hidden]) { animation: fade-up .4s var(--ease) both; }
+    ::view-transition-old(root) { animation: vt-out .24s var(--ease) both; }
+    ::view-transition-new(root) { animation: vt-in .32s var(--ease) both; }
+    @keyframes vt-out { to { opacity: 0; transform: translateY(-6px); } }
+    @keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+
+    .eyebrow { font-size: .74rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); }
+    h1.big { font-family: var(--display); font-weight: 800; font-size: clamp(2.6rem, 10vw, 3.8rem); line-height: .98; letter-spacing: -.035em; margin: 12px 0 14px; }
+    h1.big .grad { background: linear-gradient(100deg, #fff3d8, var(--amber), var(--ember)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .sub { color: var(--muted); font-size: 1.05rem; margin: 0 0 22px; }
+    h2.view-title { font-family: var(--display); font-weight: 700; font-size: 1.7rem; letter-spacing: -.02em; margin: 6px 0 18px; }
+
+    .spark { position: relative; overflow: hidden; border-radius: 26px; padding: 26px; margin-bottom: 20px; background: radial-gradient(120% 90% at 12% 0%, rgba(255,138,61,.28), transparent 55%), radial-gradient(120% 120% at 100% 100%, rgba(139,211,167,.18), transparent 50%), var(--surface); border: 1px solid var(--line); }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 6px; }
+    .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+    .stat .n { font-family: var(--display); font-weight: 800; font-size: 1.5rem; color: var(--amber); line-height: 1; }
+    .stat .l { font-size: .72rem; color: var(--muted); letter-spacing: .04em; margin-top: 6px; }
+
+    .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% cover 26%; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(20px) scale(.99); } }
+
+    .rows { display: grid; gap: 10px; }
+    .row { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
+    .row .ic { flex: none; width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; font-size: 1.1rem; background: var(--surface-2); }
+    .row h4 { margin: 0 0 2px; font-size: 1rem; font-weight: 700; font-family: var(--display); }
+    .row p { margin: 0; color: var(--muted); font-size: .92rem; }
+
+    /* ---- PLAN: schedule / agenda ---- */
+    .day-head { display: flex; align-items: baseline; gap: 10px; margin: 22px 0 8px; }
+    .day-head .d { font-family: var(--display); font-weight: 800; font-size: 1.3rem; }
+    .day-head .dd { color: var(--faint); font-size: .82rem; font-weight: 600; letter-spacing: .04em; }
+    .day-head .rule { flex: 1; height: 1px; background: var(--line); }
+    .agenda { list-style: none; margin: 0; padding: 0; }
+    .slot { display: grid; grid-template-columns: 88px 1fr; gap: 14px; }
+    .slot .t { text-align: right; font-weight: 700; font-size: .72rem; letter-spacing: .07em; text-transform: uppercase; color: var(--amber); padding-top: 16px; }
+    .slot .track { position: relative; padding: 0 0 12px 22px; }
+    .slot .track::before { content: ""; position: absolute; left: 4px; top: 16px; bottom: -4px; width: 2px; background: linear-gradient(180deg, var(--ember), rgba(255,138,61,.15)); }
+    .slot:last-child .track::before { display: none; }
+    .slot .track::after { content: ""; position: absolute; left: 0; top: 13px; width: 10px; height: 10px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 0 4px rgba(255,138,61,.16); }
+    .slot .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 13px 16px; transition: border-color .25s, transform .25s var(--ease); }
+    .slot .card:hover { border-color: var(--line-2); transform: translateX(2px); }
+    .slot .card h4 { font-family: var(--display); font-weight: 700; font-size: 1.05rem; margin: 0 0 2px; display: flex; align-items: center; gap: 8px; }
+    .slot .card p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .slot.open .card { background: linear-gradient(135deg, rgba(246,184,75,.12), rgba(255,138,61,.06)); border-color: rgba(246,184,75,.3); }
+    .slot.open .t { color: var(--ember); }
+
+    /* ---- TRAVEL: city grid with scrim overlay ---- */
+    .citygrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .citycard {
+      position: relative; aspect-ratio: 4/3; border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
+      padding: 0; text-align: left; cursor: pointer; color: var(--text); font: inherit;
+      transition: transform .3s var(--ease), border-color .3s, box-shadow .3s;
+    }
+    .citycard:hover, .citycard:focus-visible { transform: translateY(-3px); border-color: var(--line-2); box-shadow: 0 16px 34px rgba(0,0,0,.4); }
+    .citycard img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
+    .citycard:hover img { transform: scale(1.06); }
+    .citycard .scrim {
+      position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 3px;
+      padding: 15px; pointer-events: none;
+      background: linear-gradient(to top, rgba(8,9,7,.93) 6%, rgba(8,9,7,.6) 34%, rgba(8,9,7,0) 60%);
+    }
+    .citycard .tag { position: absolute; top: 12px; left: 12px; font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #1a0d02; background: var(--amber); border-radius: 999px; padding: 4px 8px; }
+    .citycard .cname { font-family: var(--display); font-weight: 800; font-size: 1.3rem; line-height: 1.05; letter-spacing: -.01em; }
+    .citycard .cname em { font-style: normal; font-family: var(--body); font-weight: 600; font-size: .72rem; color: var(--amber); margin-left: 7px; vertical-align: middle; }
+    .citycard .csum { color: rgba(244,239,228,.84); font-size: .82rem; line-height: 1.34; }
+    .citycard .more { margin-top: 5px; font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--amber); opacity: .85; }
+    .subhead { display: flex; align-items: baseline; justify-content: space-between; margin: 26px 0 12px; }
+    .subhead h2 { font-family: var(--display); font-weight: 700; font-size: 1.3rem; margin: 0; }
+    .subhead .hint { font-size: .76rem; color: var(--faint); }
+
+    /* popover bottom sheets */
+    [popover].sheet { margin: 0; border: 0; padding: 0; inset: auto 0 0 0; width: 100%; max-width: 720px; margin-inline: auto; background: var(--surface); color: var(--text); border-radius: 24px 24px 0 0; border: 1px solid var(--line); border-bottom: 0; box-shadow: 0 -30px 80px rgba(0,0,0,.5); }
+    [popover].sheet::backdrop { background: rgba(6,7,5,.6); backdrop-filter: blur(3px); }
+    [popover].sheet:popover-open { animation: sheet-up .34s var(--ease); }
+    @keyframes sheet-up { from { transform: translateY(100%); } }
+    .sheet .ph { height: 190px; position: relative; }
+    .sheet .ph img { width: 100%; height: 100%; object-fit: cover; border-radius: 24px 24px 0 0; }
+    .sheet .grip { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 44px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.6); }
+    .sheet .body { padding: 20px 22px 26px; }
+    .sheet h3 { font-family: var(--display); font-weight: 800; font-size: 1.7rem; margin: 0 0 4px; letter-spacing: -.02em; }
+    .sheet .dist { color: var(--amber); font-weight: 600; font-size: .85rem; }
+    .sheet p { color: var(--muted); margin: 12px 0 0; }
+    .sheet .close { margin-top: 20px; width: 100%; padding: 13px; border-radius: 14px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--text); font: inherit; font-weight: 700; cursor: pointer; }
+    .sheet .close:hover { border-color: var(--amber); }
+
+    .cta { display: inline-flex; align-items: center; gap: 8px; padding: 15px 24px; border-radius: 999px; font-weight: 700; text-decoration: none; color: #1a0d02; font-family: var(--body); background: linear-gradient(135deg, var(--amber), var(--ember)); box-shadow: 0 14px 36px rgba(255,138,61,.3); border: 0; cursor: pointer; }
+    .ghostbtn { display: inline-flex; align-items: center; gap: 7px; margin-top: 16px; padding: 11px 18px; border-radius: 999px; border: 1px solid var(--line-2); background: transparent; color: var(--text); font: inherit; font-weight: 600; font-size: .85rem; cursor: pointer; }
+    .ghostbtn:hover { border-color: var(--amber); }
+    .notice { margin-top: 18px; padding: 16px 18px; border-radius: 16px; background: rgba(139,211,167,.1); border: 1px solid rgba(139,211,167,.22); color: #dff3e7; font-size: .92rem; }
+    .credits { margin-top: 24px; font-size: .76rem; color: var(--faint); line-height: 1.7; }
+    .credits a { color: var(--muted); }
+    .back { display: inline-block; margin-top: 26px; font-size: .8rem; color: var(--faint); }
+
+    @media (max-width: 720px) {
+      .bar-inner { min-height: 0; display: grid; align-items: center; gap: 11px 16px; grid-template-columns: 1fr auto; grid-template-areas: "id date" "tabs tabs"; }
+      .appbar .id { position: static; transform: none; grid-area: id; justify-self: start; }
+      .date { position: static; transform: none; grid-area: date; justify-self: end; }
+      .tabs { grid-area: tabs; justify-self: stretch; gap: 4px; }
+      .tabs button { flex: 1; padding: 9px 6px; }
+      .tabs button .lbl { font-size: .8rem; }
+    }
+    @media (max-width: 380px) { .tabs button .lbl { display: none; } .tabs button { padding: 10px; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .001ms !important; }
+      .reveal { animation: none; opacity: 1; } .appbar .mark { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+   <div class="bar-inner">
+    <a class="id" href="#" onclick="go('home');return false;"><span class="mark">🔥</span><b>Guild Meetup</b></a>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" aria-selected="true" onclick="go('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.2 3-2 4-2 7a2 2 0 104 0c0 1.2 2 2.2 2 4.2a4 4 0 11-8 0C8 12 12 10 12 3z"/></svg><span class="lbl">Home</span></button>
+      <button role="tab" aria-selected="false" onclick="go('plan')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4M7.5 13h3M7.5 16.5h6"/></svg><span class="lbl">Schedule</span></button>
+      <button role="tab" aria-selected="false" onclick="go('travel')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.6 8.4l-2.1 5.1-5.1 2.1 2.1-5.1z"/></svg><span class="lbl">Travel</span></button>
+      <button role="tab" aria-selected="false" onclick="go('info')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8 8 0 01-11.6 7.1L4 20.5l1.9-5.3A8 8 0 1121 11.5z"/></svg><span class="lbl">Info</span></button>
+    </nav>
+    <span class="date"><span class="d">Sat 18 Jul 2026</span><span class="l">Hamont-Achel</span></span>
+   </div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section data-view id="home">
+      <div class="spark">
+        <span class="eyebrow">+1s welcome</span>
+        <h1 class="big">Beers, BBQs &amp;<br /><span class="grad">Belgian summer chaos.</span></h1>
+        <p class="sub">A relaxed guild weekend near the Dutch border — campfire beers, BBQ smoke, music in the garden, and finally meeting everyone outside of Discord.</p>
+        <button class="cta" onclick="go('plan')">See the schedule →</button>
+      </div>
+      <div class="stats">
+        <div class="stat reveal"><div class="n">18·07</div><div class="l">Saturday 2026</div></div>
+        <div class="stat reveal"><div class="n">20–30°</div><div class="l">Belgian summer</div></div>
+        <div class="stat reveal"><div class="n">6</div><div class="l">Cities nearby</div></div>
+      </div>
+      <div class="rows" style="margin-top:20px">
+        <div class="row reveal"><span class="ic">🍖</span><div><h4>Garden hangout &amp; BBQ</h4><p>Music on, beers cold, campfire lit. The main event.</p></div></div>
+        <div class="row reveal"><span class="ic">🛏️</span><div><h4>Optional Sunday</h4><p>Breakfast and a slow recovery for anyone who survives.</p></div></div>
+        <div class="row reveal"><span class="ic">📺</span><div><h4>Remote chaos possible</h4><p>Outdoor projector + Discord if the weather behaves.</p></div></div>
+      </div>
+    </section>
+
+    <!-- PLAN (schedule) -->
+    <section data-view id="plan" hidden>
+      <span class="eyebrow">The plan · loosely</span>
+      <h2 class="view-title">The weekend, hour by hour.</h2>
+      <div class="day">
+        <div class="day-head"><span class="d">Saturday</span><span class="dd">18 July</span><span class="rule"></span></div>
+        <ol class="agenda">
+          <li class="slot"><div class="t">Afternoon</div><div class="track"><div class="card"><h4>🌤️ Arrival &amp; garden hangout</h4><p>People roll in, grab a drink, meet properly and settle in.</p></div></div></li>
+          <li class="slot open"><div class="t">Evening</div><div class="track"><div class="card"><h4>🔥 BBQ fires up</h4><p>The main event — food, beers and the first round of guild stories.</p></div></div></li>
+          <li class="slot"><div class="t">Night</div><div class="track"><div class="card"><h4>🎶 Campfire &amp; music</h4><p>Music in the garden, campfire lit, “just one more drink.”</p></div></div></li>
+          <li class="slot"><div class="t">Late</div><div class="track"><div class="card"><h4>🌙 Bars &amp; night-shop runs</h4><p>Local bars across the street; emergency beer logistics engaged.</p></div></div></li>
+          <li class="slot"><div class="t">Small hours</div><div class="track"><div class="card"><h4>💤 Someone sleeps somewhere unreasonable</h4><p>It happens every time. Beds exist for everyone else.</p></div></div></li>
+        </ol>
+      </div>
+      <div class="day">
+        <div class="day-head"><span class="d">Sunday</span><span class="dd">19 July · optional</span><span class="rule"></span></div>
+        <ol class="agenda">
+          <li class="slot"><div class="t">Morning</div><div class="track"><div class="card"><h4>☕ Slow breakfast</h4><p>Coffee, recovery and a recap of what nobody fully remembers.</p></div></div></li>
+          <li class="slot"><div class="t">Midday</div><div class="track"><div class="card"><h4>🌲 Walk, nature or head off</h4><p>De Malpie heathland nearby — or a slow goodbye whenever you're ready.</p></div></div></li>
+        </ol>
+      </div>
+      <div class="notice">Bring light clothes, an evening layer and a rain backup. There's space to sit outside and sleeping spots for people staying over.</div>
+    </section>
+
+    <!-- TRAVEL -->
+    <section data-view id="travel" hidden>
+      <span class="eyebrow">Getting here &amp; out</span>
+      <h2 class="view-title">Basecamp with day-trips.</h2>
+      <div class="rows">
+        <div class="row reveal"><span class="ic">✈️</span><div><h4>Closest airports</h4><p>Eindhoven is nearest; Brussels &amp; Amsterdam Schiphol for international.</p></div></div>
+        <div class="row reveal"><span class="ic">🚆</span><div><h4>By train</h4><p>Toward Neerpelt from Brussels; toward Weert from Amsterdam/Schiphol.</p></div></div>
+        <div class="row reveal"><span class="ic">🚗</span><div><h4>Pickup help</h4><p>Jan will try to organise pickups where possible, depending on timing.</p></div></div>
+      </div>
+      <div class="subhead"><h2>Cities within reach</h2><span class="hint">tap a city for details</span></div>
+      <div class="citygrid" id="cities"></div>
+      <button class="ghostbtn" popovertarget="sheet-credits">ⓘ Photo credits</button>
+    </section>
+
+    <!-- INFO -->
+    <section data-view id="info" hidden>
+      <span class="eyebrow">Questions?</span>
+      <h2 class="view-title">We'll figure it out.</h2>
+      <p class="sub">Transport, flights, sleeping arrangements, nearby hotels, what to bring, city trips — ask about anything. This is supposed to feel relaxed, not stressful.</p>
+      <a class="cta" href="mailto:jan.minke@telenet.be">Contact Jan →</a>
+      <div class="notice" style="margin-top:22px;background:rgba(255,123,110,.09);border-color:rgba(255,123,110,.22);color:#ffdcd7">
+        Meeting online friends IRL can feel weird at first — that's fine. The goal is simple: safe, relaxed and welcoming. No pressure, no forced activities.
+      </div>
+      <a class="back" href="../../">← View the main invite</a>
+    </section>
+  </main>
+
+  <div popover class="sheet" id="sheet-credits">
+    <div class="body">
+      <h3 style="font-size:1.3rem">Photo credits</h3>
+      <p style="margin-top:8px">City photos via Wikimedia Commons, used under their Creative Commons licenses:</p>
+      <p class="credits" id="credits-list"></p>
+      <button class="close" popovertarget="sheet-credits" popovertargetaction="hide">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const CITIES = [
+      { key:"eindhoven",  name:"Eindhoven",  dist:"~30 min", tag:"Nightlife",  sum:"Terraces, students and the famous Stratumseind pub street.", by:"Zairon", lic:"CC BY-SA 4.0", src:"https://commons.wikimedia.org/wiki/File:Eindhoven_Evoluon_06.jpg", desc:"The closest proper city — terraces, student energy and the famous Stratumseind pub street. The Evoluon looks like a landed UFO." },
+      { key:"amsterdam",  name:"Amsterdam",  dist:"~1.5 h",  tag:"Canals",     sum:"Canals, coffeeshops, crowds and nightlife chaos.", by:"Basile Morin", lic:"CC BY-SA 4.0", src:"https://commons.wikimedia.org/wiki/File:Water_reflection_of_canal_houses_at_blue_hour_in_Damrak_Amsterdam_the_Netherlands.jpg", desc:"Canals, coffeeshops, crowds and nightlife. Chaotic and expensive — but worth experiencing at least once." },
+      { key:"maastricht", name:"Maastricht", dist:"~1 h",    tag:"Burgundian", sum:"Old streets, terraces and long sunny afternoons.", by:"Berthold Werner", lic:"CC BY-SA 4.0", src:"https://commons.wikimedia.org/wiki/File:Maastricht_Vrijthof_15_BW_2017-08-19_12-06-24.jpg", desc:"Old streets, terraces and good food. Calmer and more grown-up than Amsterdam — the ideal recovery city." },
+      { key:"brussels",   name:"Brussels",   dist:"~1.5 h",  tag:"Clubs",      sum:"Hidden bars, late-night food and club culture.", by:"Diego Delso", lic:"CC BY-SA 4.0", src:"https://commons.wikimedia.org/wiki/File:Edificios_en_la_Grand-Place,_Bruselas,_B%C3%A9lgica,_2021-12-15,_DD_184-186_HDR.jpg", desc:"International, messy in the best possible way, with late-night food and proper club culture. The Grand-Place is unreal at night." },
+      { key:"antwerp",    name:"Antwerp",    dist:"~1.5 h",  tag:"Style",      sum:"Style, cafés and an absurdly beautiful train station.", by:"Trougnouf", lic:"CC BY 4.0", src:"https://commons.wikimedia.org/wiki/File:Antwerp,_BE_(DSC_0192)_Antwerpen-Centraal_railway_station_main_hall_ceiling.jpg", desc:"Stylish without trying too hard — architecture, cafés and one of the most absurdly beautiful train stations in Europe." },
+      { key:"dusseldorf", name:"Düsseldorf", dist:"~1.5 h",  tag:"Altstadt",   sum:"Altstadt bars and a huge Japanese food district.", by:"Anıl Öztaş", lic:"CC BY-SA 4.0", src:"https://commons.wikimedia.org/wiki/File:D%C3%BCsseldorf_(DE),_Jan-Wellem-Reiterdenkmal_--_2014_--_2313.jpg", desc:"The Altstadt has hundreds of bars packed close together, plus a huge Japanese district full of ramen and sushi." },
+    ];
+    const IMG = (k) => `../../images/locations/${k}.jpg`;
+
+    const wrap = document.getElementById("cities"), sheets = [];
+    CITIES.forEach((c) => {
+      const id = `sheet-${c.key}`;
+      wrap.insertAdjacentHTML("beforeend", `
+        <button class="citycard" popovertarget="${id}" aria-label="${c.name} — open details">
+          <img src="${IMG(c.key)}" alt="${c.name}" loading="lazy" />
+          <span class="scrim">
+            <span class="tag">${c.tag}</span>
+            <span class="cname">${c.name}<em>${c.dist}</em></span>
+            <span class="csum">${c.sum}</span>
+            <span class="more">Tap for details →</span>
+          </span>
+        </button>`);
+      sheets.push(`
+        <div popover class="sheet" id="${id}">
+          <div class="ph"><span class="grip"></span><img src="${IMG(c.key)}" alt="${c.name}" /></div>
+          <div class="body"><span class="dist">${c.dist} away · ${c.tag}</span><h3>${c.name}</h3><p>${c.desc}</p>
+            <button class="close" popovertarget="${id}" popovertargetaction="hide">Close</button></div>
+        </div>`);
+    });
+    document.body.insertAdjacentHTML("beforeend", sheets.join(""));
+    document.getElementById("credits-list").innerHTML =
+      CITIES.map((c) => `${c.name} — ${c.by}, <a href="${c.src}" target="_blank" rel="noopener">${c.lic}</a>`).join("<br>");
+
+    const views = Array.from(document.querySelectorAll("[data-view]"));
+    const tabs = Array.from(document.querySelectorAll(".tabs button"));
+    function swap(id) {
+      views.forEach((v) => (v.hidden = v.id !== id));
+      tabs.forEach((t, i) => t.setAttribute("aria-selected", views[i].id === id));
+      window.scrollTo({ top: 0 });
+    }
+    function go(id) { document.startViewTransition ? document.startViewTransition(() => swap(id)) : swap(id); }
+    window.go = go;
+  </script>
+</body>
+</html>

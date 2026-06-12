@@ -19,13 +19,19 @@ written so that **both you and Claude** know exactly what to do.
 
 ## The 30-second version
 
-- The website is **one page**: `index.html`.
-- Photos live in the **`images/` folder**. To add a photo, you put a picture in
-  that folder. To remove one, you delete it from that folder. That's it.
+- The default website is **`index.html`** — that's the live invite at the main address.
+- There are also a few **alternative designs** under `designs/`, each at its own URL.
+  Browse them at the directory page `/designs/`. See "Multiple design options" below.
+- **Location photos** (Eindhoven, Amsterdam, …) live in **`images/locations/`** and are used
+  by the city-focused designs. They're Creative-Commons licensed and credited on the page.
 - When a change is saved to GitHub, the website **rebuilds and goes live by itself**
   in about 1–2 minutes. Nobody has to "deploy" anything.
 - The live website address is:
   **https://silvermoon-guard.github.io/guild_meetup/**
+
+> Note: an optional drop-in photo "gallery" is supported (drop files in `images/`, they
+> appear automatically) but no page currently uses it — it was a demo and has been removed.
+> To switch one on, see "Multiple design options". The recipes below still apply if you do.
 
 ---
 
@@ -76,7 +82,7 @@ Create (or edit) a file called **`images/captions.json`** that looks like this:
 ```json
 {
   "firelands-first-kill.jpg": "When we finally killed Ragnaros (2014)",
-  "beloren-guild-raid.png": "Belo'ren on Al'Akir — Battle Standard up"
+  "garden-bbq-2026.jpg": "The infamous campfire, 1 AM"
 }
 ```
 
@@ -217,9 +223,10 @@ come from **craft — spacing, hierarchy, restraint, micro-interactions — not 
 | File / folder | What it's for |
 |---|---|
 | `index.html` | The **default** website (what visitors see at the main URL `/`). Edit this to change wording. |
-| `designs/` | Alternative layout experiments, each served at its own URL (e.g. `designs/poster/` → `/designs/poster/`). See "Multiple design options" below. |
-| `images/` | Drop photos here. They become the gallery on every design automatically. |
-| `images/captions.json` | *(optional)* Custom captions for specific photos. |
+| `designs/` | Alternative layout experiments. `designs/index.html` is a directory at `/designs/`; current experiments: `poster/`, `app/`, `explore/`. See "Multiple design options" below. |
+| `images/locations/` | City photos (Eindhoven, Amsterdam, …) used by the city designs. CC-licensed; see `images/locations/credits.json`. |
+| `images/` | Drop photos here for the *optional* auto-gallery (off by default — see the note up top). |
+| `images/captions.json` | *(optional)* Custom captions for auto-gallery photos. |
 | `scripts/build-gallery.mjs` | The helper that rebuilds the gallery in every design from `images/`. Runs automatically when publishing; you rarely run it by hand. |
 | `.github/workflows/deploy.yml` | The automation that publishes the site to GitHub Pages on every change. You should not need to touch this. |
 | `CLAUDE.md` | This guide. |
@@ -238,12 +245,17 @@ deciding to switch to it.
 **How it works:**
 - The **default** design is `index.html` at the top of the repo. It's what people see at
   the main address: **https://silvermoon-guard.github.io/guild_meetup/**
+- `designs/index.html` is a **directory page** at `/designs/` that lists every design with a
+  short blurb — the easy way for people to discover and compare them.
 - Each **experiment** lives in its own folder under `designs/`, as `designs/<name>/index.html`,
-  and gets its own address. Example already in the repo:
-  `designs/poster/index.html` → **https://silvermoon-guard.github.io/guild_meetup/designs/poster/**
-- Every design shares the **same `images/` folder**. Add a photo once and it appears in
-  all of them automatically — the build script figures out the correct image path for
-  each design's location.
+  and gets its own address. Current experiments:
+  `poster/` (compact flyer), `app/` (phone-app feel with modern interactions),
+  `explore/` (image-forward tour of nearby cities, using the photos in `images/locations/`).
+- City designs reference shared photos in `images/locations/` (credited on the page). If a
+  design includes the optional auto-gallery markers, all such designs share the top-level
+  `images/` folder and the build script writes the correct relative path for each.
+
+**When you add a new experiment, add a card for it to `designs/index.html` so people can find it.**
 
 **To create a new experiment** (easiest: just ask Claude, *"make a new design experiment called sunset"*):
 1. Copy an existing folder, e.g. `designs/poster/` → `designs/sunset/`, and edit that copy.

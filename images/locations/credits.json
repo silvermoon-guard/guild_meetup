@@ -1,0 +1,56 @@
+[
+  {
+    "key": "eindhoven",
+    "name": "Eindhoven",
+    "title": "Eindhoven Evoluon 06.jpg",
+    "artist": "Zairon",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Eindhoven_Evoluon_06.jpg"
+  },
+  {
+    "key": "amsterdam",
+    "name": "Amsterdam",
+    "title": "Water reflection of canal houses at blue hour in Damrak Amsterdam the Netherlands.jpg",
+    "artist": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Water_reflection_of_canal_houses_at_blue_hour_in_Damrak_Amsterdam_the_Netherlands.jpg"
+  },
+  {
+    "key": "maastricht",
+    "name": "Maastricht",
+    "title": "Maastricht Vrijthof 15 BW 2017-08-19 12-06-24.jpg",
+    "artist": "Berthold Werner",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Maastricht_Vrijthof_15_BW_2017-08-19_12-06-24.jpg"
+  },
+  {
+    "key": "brussels",
+    "name": "Brussels",
+    "title": "Edificios en la Grand-Place, Bruselas, Bélgica, 2021-12-15, DD 184-186 HDR.jpg",
+    "artist": "Diego Delso",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Edificios_en_la_Grand-Place,_Bruselas,_B%C3%A9lgica,_2021-12-15,_DD_184-186_HDR.jpg"
+  },
+  {
+    "key": "antwerp",
+    "name": "Antwerp",
+    "title": "Antwerp, BE (DSC 0192) Antwerpen-Centraal railway station main hall ceiling.jpg",
+    "artist": "Trougnouf",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Antwerp,_BE_(DSC_0192)_Antwerpen-Centraal_railway_station_main_hall_ceiling.jpg"
+  },
+  {
+    "key": "dusseldorf",
+    "name": "Düsseldorf",
+    "title": "Düsseldorf (DE), Jan-Wellem-Reiterdenkmal -- 2014 -- 2313.jpg",
+    "artist": "Anıl Öztaş",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:D%C3%BCsseldorf_(DE),_Jan-Wellem-Reiterdenkmal_--_2014_--_2313.jpg"
+  }
+]
